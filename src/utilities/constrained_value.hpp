@@ -1,3 +1,6 @@
+#ifndef UTILITIES_CONSTRAINED_VALUE_HPP
+#define UTILITIES_CONSTRAINED_VALUE_HPP
+
 
 #include <stdexcept>
 
@@ -5,7 +8,7 @@ namespace QLab
 {
 
 
-template <class ValuePolicy>
+template <typename ValuePolicy>
 class ConstrainedValue
 {
 public:
@@ -94,3 +97,6 @@ public:
 
 
 } // namespace QLab  
+
+
+#endif // end of include guard: UTILITIES_CONSTRAINED_VALUE_HPP
