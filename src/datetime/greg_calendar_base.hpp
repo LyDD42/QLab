@@ -1,6 +1,7 @@
 #ifndef QLAB_DATE_TIME_CALENDER_HPP_
 #define QLAB_DATE_TIME_CALENDER_HPP_
 
+#include <cstdint>
 
 namespace QLab {
 
@@ -8,21 +9,20 @@ namespace QLab {
 template <class YMDT_, class DateIntT_>
 class GregorianCalendarBase{
 public:
-	using YMDT		= YMDT_;
-	using YearT		= typename YMDT::YerT;
+    using YMDT      = YMDT_;
+	using YearT		= typename YMDT::YearT;
 	using MonthT	= typename YMDT::MonthT;
 	using DayT		= typename YMDT::DayT;
 	using DateIntT  = DateIntT_;
 
-	static YMDT from_day_num (const DateIntT);
-	static DateIntT_ day_num (const YMDT_&);
+	static auto from_day_number(const DateIntT) -> YMDT;
+	static auto day_number(const YMDT&) -> DateIntT;
 };
 
 
 //! Change a day number into a year-month-day
 template<typename YMDT_, typename DateIntT_>
-YMDT GregorianCalendarBase<YMDT_, DateIntT_>::from_day_number(DateIntT dayNumber)
-{
+auto GregorianCalendarBase<YMDT_, DateIntT_>::from_day_number(DateIntT dayNumber) -> YMDT {
     DateIntT a = dayNumber + 32044;
     DateIntT b = (4*a + 3)/146097;
     DateIntT c = a-((146097*b)/4);
@@ -37,7 +37,7 @@ YMDT GregorianCalendarBase<YMDT_, DateIntT_>::from_day_number(DateIntT dayNumber
 
 
 template<typename YMDT_, typename DateIntT_>
-DateIntT GregorianCalendarBase<YMDT_, DateIntT_>::day_number(const YMDT& ymd){
+auto GregorianCalendarBase<YMDT_, DateIntT_>::day_number(const YMDT& ymd) -> DateIntT {
    uint32_t a = static_cast<uint32_t>((14-ymd.month)/12);
    uint32_t y = static_cast<uint32_t>(ymd.year + 4800 - a);
    uint32_t m = static_cast<uint32_t>(ymd.month + 12*a - 3);                                                                                                                                    
@@ -47,7 +47,6 @@ DateIntT GregorianCalendarBase<YMDT_, DateIntT_>::day_number(const YMDT& ymd){
 
 
 } // namespace QLab
-
 
 
 #endif

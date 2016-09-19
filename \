@@ -7,12 +7,7 @@
 BOOST_AUTO_TEST_SUITE(test_date_time)
 
 BOOST_AUTO_TEST_CASE(test_case_1){
-BOOST_REQUIRE(true);
-BOOST_CHECK(true);
-}
-
-BOOST_AUTO_TEST_CASE(test_case_2){
-BOOST_CHECK(true);
+BOOST_TEST(true);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
