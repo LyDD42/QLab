@@ -6,7 +6,7 @@ namespace QLab {
 
 
 template <class YMDT_, class DateIntT_>
-class GregorianCalenderBase{
+class GregorianCalendarBase{
 public:
 	using YMDT		= YMDT_;
 	using YearT		= typename YMDT::YerT;
@@ -21,7 +21,7 @@ public:
 
 //! Change a day number into a year-month-day
 template<typename YMDT_, typename DateIntT_>
-YMDT GregorianCalenderBase<YMDT_, DateIntT_>::from_day_number(DateIntT dayNumber)
+YMDT GregorianCalendarBase<YMDT_, DateIntT_>::from_day_number(DateIntT dayNumber)
 {
     DateIntT a = dayNumber + 32044;
     DateIntT b = (4*a + 3)/146097;
@@ -37,7 +37,7 @@ YMDT GregorianCalenderBase<YMDT_, DateIntT_>::from_day_number(DateIntT dayNumber
 
 
 template<typename YMDT_, typename DateIntT_>
-DateIntT GregorianCalenderBase<YMDT_, DateIntT_>::day_number(const YMDT& ymd){
+DateIntT GregorianCalendarBase<YMDT_, DateIntT_>::day_number(const YMDT& ymd){
    uint32_t a = static_cast<uint32_t>((14-ymd.month)/12);
    uint32_t y = static_cast<uint32_t>(ymd.year + 4800 - a);
    uint32_t m = static_cast<uint32_t>(ymd.month + 12*a - 3);                                                                                                                                    
