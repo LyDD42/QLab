@@ -17,6 +17,11 @@ public:
 
 	static auto from_day_number(const DateIntT) -> YMDT;
 	static auto day_number(const YMDT&) -> DateIntT;
+    static auto epoch() -> YMDT;
+    static auto is_leap_year(const YearT&) -> bool;
+    static auto end_of_month(const YearT&, const MonthT&) -> uint8_t;
+    static auto day_of_week(const YMDT&) -> uint8_t;
+
 };
 
 
@@ -35,7 +40,6 @@ auto GregorianCalendarBase<YMDT_, DateIntT_>::from_day_number(DateIntT dayNumber
     return YMDT(static_cast<uint32_t>(year), month, day);
 }
 
-
 template<typename YMDT_, typename DateIntT_>
 auto GregorianCalendarBase<YMDT_, DateIntT_>::day_number(const YMDT& ymd) -> DateIntT {
    uint32_t a = static_cast<uint32_t>((14-ymd.month)/12);
@@ -43,6 +47,16 @@ auto GregorianCalendarBase<YMDT_, DateIntT_>::day_number(const YMDT& ymd) -> Dat
    uint32_t m = static_cast<uint32_t>(ymd.month + 12*a - 3);
    uint32_t d = ymd.day + ((153*m + 2)/5) + 365*y + (y/4) - (y/100) + (y/400) - 32045;
    return static_cast<DateIntT>(d);
+}
+
+template<typename YMDT_, typename DateIntT_>
+auto GregorianCalendarBase<YMDT_, DateIntT_>::is_leap_year(const YearT& year) -> bool {
+    return (!(year % 4))  && ((year % 100) || (!(year % 400)));
+}
+
+template<typename YMDT_, typename DateIntT_>
+auto GregorianCalendarBase<YMDT_, DateIntT_>::epoch() -> YMDT {
+    return YMDT(1400, 1, 1);
 }
 
 
