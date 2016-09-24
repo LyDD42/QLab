@@ -59,7 +59,7 @@ public:
     using ValueT = ValueT_;
 
     static bool validate (ValueT value) {
-        if (value < max) {
+        if (value > max) {
             return false;
         } else {
             return true;

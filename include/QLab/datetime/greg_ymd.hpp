@@ -1,8 +1,8 @@
 #ifndef DATE_TIME_GREG_YMD_HPP
 #define DATE_TIME_GREG_YMD_HPP
 
-#include "utilities/constrained_value.hpp"
-#include "datetime/year_month_day.hpp"
+#include "QLab/utilities/constrained_value.hpp"
+#include "QLab/datetime/year_month_day.hpp"
 
 namespace QLab
 {
