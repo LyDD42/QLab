@@ -1,5 +1,6 @@
-#ifndef QLAB_DATE_TIME_YEAR_MONTH_DAY_HPP_
-#define QLAB_DATE_TIME_YEAR_MONTH_DAY_HPP_
+#ifndef QLAB_DATETIME_YEAR_MONTH_DAY_HPP_EGK7MHUI
+#define QLAB_DATETIME_YEAR_MONTH_DAY_HPP_EGK7MHUI
+
 
 namespace QLab {
 
@@ -26,4 +27,4 @@ public:
 } // namespace QLab
 
 
-#endif
+#endif // end of include guard: QLAB_DATETIME_YEAR_MONTH_DAY_HPP_EGK7MHUI
