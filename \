@@ -1,0 +1,28 @@
+#ifndef QLAB_DATE_TIME_DATE_HPP_
+#define QLAB_DATE_TIME_DATE_HPP_
+
+
+namespace QLab {
+
+
+template <class DateT_, class CalenderT_, class DurationT_>
+class base_DateT {
+public:
+	using DateT		= DateT_;
+	using CalenderT	= CalenderT_;
+	using DurationT = DurationT_;
+    using YearT     = typename CalenderT::YearT;
+    using MonthT    = typename CalenderT::YearT;
+    using YearT     = typename CalenderT::YearT;
+
+
+
+private:
+protected:
+};
+
+
+} // namespace QLab
+
+
+#endif
