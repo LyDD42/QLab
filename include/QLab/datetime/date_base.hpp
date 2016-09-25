@@ -1,5 +1,5 @@
-#ifndef QLAB_DATE_TIME_DATE_HPP_
-#define QLAB_DATE_TIME_DATE_HPP_
+#ifndef QLAB_DATETIME_DATE_BASE_HPP_AYUFJRUI
+#define QLAB_DATETIME_DATE_BASE_HPP_AYUFJRUI
 
 
 namespace QLab {
@@ -24,6 +24,13 @@ public:
         : days_(CalenderT::day_number(ymd))
     {}
 
+    DateBaseT(const DateBaseT<DateT, CalenderT, DurationT>&) = default;
+    DateBaseT& operator=(const DateBaseT<DateT, CalenderT, DurationT>&) = default;
+    DateBaseT(DateBaseT<DateT, CalenderT, DurationT>&&) = default;
+    DateBaseT& operator=(DateBaseT<DateT, CalenderT, DurationT>&&) = default;
+    ~DateBaseT() = default;
+
+
 private:
     DateIntT days_;
 };
@@ -32,4 +39,4 @@ private:
 } // namespace QLab
 
 
-#endif
+#endif // end of include guard: QLAB_DATETIME_DATE_BASE_HPP_AYUFJRUI

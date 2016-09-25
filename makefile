@@ -3,7 +3,7 @@ STD = c++14
 QLAB_INCLUDE = include
 BOOST_INCLUDE = /home/LyDD/include
 BOOST_LIB_PATH = /home/LyDD/lib/boost
-BOOST_LIBS = boost_unit_test_framework boost_timer boost_chrono
+BOOST_LIBS = boost_unit_test_framework boost_timer boost_chrono boost_system
 
 
 INCLUDE = $(QLAB_INCLUDE) $(BOOST_INCLUDE)
