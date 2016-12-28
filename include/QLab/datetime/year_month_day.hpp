@@ -12,7 +12,7 @@ public:
 	using MonthT	= MonthT_;
 	using DayT		= DayT_;
 
-	YMDBase (YearT year, MonthT month, DayT day):
+	constexpr YMDBase (YearT year, MonthT month, DayT day):
 		year(year),
 		month(month),
 		day(day)

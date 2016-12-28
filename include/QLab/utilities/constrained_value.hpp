@@ -12,10 +12,10 @@ template <typename ValuePolicy>
 class ConstrainedValue
 {
 public:
-    using ValueT = typename ValuePolicy::ValueT;
+    using value_type = typename ValuePolicy::value_type;
     
     // TODO: check if assign value_ some value
-    ConstrainedValue (ValueT value) {
+    ConstrainedValue (value_type value) {
         if (ValuePolicy::validate(value)) {
             value_  = value;
         } else {
@@ -23,21 +23,21 @@ public:
         }
         
     }
-    // all cases expecting ValueT should accept ConstrainedValueT<ValuePolicy<ValueT>>
-    operator ValueT () const { return value_; }
+    // all cases expecting value_type should accept ConstrainedValueT<ValuePolicy<value_type>>
+    operator value_type () const { return value_; }
 
 private:
-    ValueT value_;
+    value_type value_;
 };
 
 
-template <typename ValueT_, ValueT_ min>
+template <typename Value_, Value_ min>
 class LowerBounded
 {
 public:
-    using ValueT = ValueT_;
+    using value_type = Value_;
 
-    static bool validate (ValueT value) {
+    static bool validate (value_type value) {
         if (value < min) {
             return false;
         } else {
@@ -45,20 +45,20 @@ public:
         }
     }
 
-    static void on_error(ValueT value) {
+    static void on_error(value_type value) {
         throw std::out_of_range("violated lower bound constraint");
     }
 
 };
 
 
-template <typename ValueT_, ValueT_ max>
+template <typename Value_, Value_ max>
 class UpperBounded
 {
 public:
-    using ValueT = ValueT_;
+    using value_type = Value_;
 
-    static bool validate (ValueT value) {
+    static bool validate (value_type value) {
         if (value > max) {
             return false;
         } else {
@@ -66,19 +66,19 @@ public:
         }
     }
 
-    static void on_error(ValueT value) {
+    static void on_error(value_type value) {
         throw std::out_of_range("violated upper bound constraint");
     }
 
 };
 
 
-template <class ValueT_, ValueT_ min, ValueT_ max>
+template <class Value_, Value_ min, Value_ max>
 class BiBounded {
 public:
-    using ValueT = ValueT_;
+    using value_type = Value_;
 
-    static bool validate (ValueT value) {
+    static bool validate (value_type value) {
         if (value < min) {
             return false;
         } else if (value > max) {
@@ -89,7 +89,7 @@ public:
 
     }
     
-    static void on_error(ValueT value) {
+    static void on_error(value_type value) {
         throw std::out_of_range("violated bi bound constraint");
     }
 

@@ -5,34 +5,34 @@
 namespace QLab {
 
 
-template <class DateT_, class CalenderT_, class DurationT_>
-class DateBaseT {
+template <class Date_, class Calendar_, class Duration_>
+class DateBase {
 public:
-	using DateT		= DateT_;
-	using CalenderT	= CalenderT_;
-	using DurationT = DurationT_;
-    using YMDT      = typename CalenderT::YMDT;
-    using DateIntT  = typename CalenderT::DateIntT;
-    using YearT     = typename CalenderT::YearT;
-    using MonthT    = typename CalenderT::MonthT;
-    using DayT      = typename CalenderT::DayT;
+	using date_type		= Date_;
+	using calendar_type	= Calendar_;
+	using duration_type = Duration_;
+    using ymd_type      = typename calendar_type::ymd_type;
+    using date_int_type = typename calendar_type::date_int_type;
+    using year_type     = typename calendar_type::year_type;
+    using month_type    = typename calendar_type::month_type;
+    using day_type      = typename calendar_type::day_type;
     
-    DateBaseT(YearT year, MonthT month, DayT day)
-        : days_(CalenderT::day_number(YMDT(year, month, day)))
+    DateBase(year_type year, month_type month, day_type day)
+        : days_(calendar_type::day_number(ymd_type(year, month, day)))
     {}
-    DateBaseT(YMDT ymd)
-        : days_(CalenderT::day_number(ymd))
+    DateBase(ymd_type ymd)
+        : days_(calendar_type::day_number(ymd))
     {}
 
-    DateBaseT(const DateBaseT<DateT, CalenderT, DurationT>&) = default;
-    DateBaseT& operator=(const DateBaseT<DateT, CalenderT, DurationT>&) = default;
-    DateBaseT(DateBaseT<DateT, CalenderT, DurationT>&&) = default;
-    DateBaseT& operator=(DateBaseT<DateT, CalenderT, DurationT>&&) = default;
-    ~DateBaseT() = default;
+    constexpr DateBase(const DateBase<date_type, calendar_type, duration_type>&) = default;
+    constexpr DateBase& operator=(const DateBase<date_type, calendar_type, duration_type>&) = default;
+    constexpr DateBase(DateBase<date_type, calendar_type, duration_type>&&) = default;
+    constexpr DateBase& operator=(DateBase<date_type, calendar_type, duration_type>&&) = default;
+    ~DateBase() = default;
 
 
 private:
-    DateIntT days_;
+    date_int_type days_;
 };
 
 

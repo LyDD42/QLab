@@ -6,8 +6,8 @@
 
 namespace utf = boost::unit_test;
 
-using QLab::utilities::IntAdapter;
-using QLab::utilities::SpecialValues;
+using QLab::IntAdapter;
+using QLab::SpecialValues;
 
 using UIntAdapted = IntAdapter<unsigned>;
 using IntAdapted = IntAdapter<int>;

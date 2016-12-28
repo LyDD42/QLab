@@ -7,8 +7,6 @@
 
 namespace QLab {
 
-namespace utilities {
-
 
 enum class SpecialValues : int {
     not_a_num,
@@ -36,9 +34,9 @@ enum class SpecialValues : int {
 template <typename Int_>
 class IntAdapter {
 public:
-    using Int = Int_;
+    using int_type = Int_;
 
-    constexpr IntAdapter(const Int v) : value_(v) {}
+    constexpr IntAdapter(const int_type v) : value_(v) {}
 
     static constexpr bool has_infinity() noexcept
     {
@@ -47,23 +45,23 @@ public:
 
     static constexpr IntAdapter  pos_inf()
     {
-        return (::std::numeric_limits<Int>::max)();
+        return (::std::numeric_limits<int_type>::max)();
     }
     static constexpr IntAdapter  neg_inf()
     {
-        return (::std::numeric_limits<Int>::min)();
+        return (::std::numeric_limits<int_type>::min)();
     }
     static constexpr IntAdapter  not_a_num()
     {
-        return (::std::numeric_limits<Int>::max)()-1;
+        return (::std::numeric_limits<int_type>::max)()-1;
     }
     static constexpr IntAdapter max ()
     {
-        return (::std::numeric_limits<Int>::max)()-2;
+        return (::std::numeric_limits<int_type>::max)()-2;
     }
     static constexpr IntAdapter min ()
     {
-        return (::std::numeric_limits<Int>::min)()+1;
+        return (::std::numeric_limits<int_type>::min)()+1;
     }
     static constexpr IntAdapter from_special(SpecialValues sv)
     {
@@ -86,34 +84,34 @@ public:
         return not_a_num();
     }
     //! Returns either special value type or is_not_special
-    static constexpr SpecialValues to_special(Int v)
+    static constexpr SpecialValues to_special(int_type v)
     {
         if (is_nan(v)) return SpecialValues::not_a_num;
         if (is_neg_inf(v)) return SpecialValues::neg_inf;
         if (is_pos_inf(v)) return SpecialValues::pos_inf;
         return SpecialValues::not_special;
     }
-    static constexpr bool is_inf(Int v)
+    static constexpr bool is_inf(int_type v)
     {
         return (v == neg_inf().as_number() ||
                 v == pos_inf().as_number());
     }
-    static constexpr bool is_neg_inf(Int v)
+    static constexpr bool is_neg_inf(int_type v)
     {
         return (v == neg_inf().as_number());
     }
-    static constexpr bool is_pos_inf(Int v)
+    static constexpr bool is_pos_inf(int_type v)
     {
         return (v == pos_inf().as_number());
     }
-    static constexpr bool is_nan(Int v)
+    static constexpr bool is_nan(int_type v)
     {
         return (v == not_a_num().as_number());
     }
     //-3 leaves room for representations of infinity and not a date
-    static constexpr Int maxcount()
+    static constexpr int_type maxcount()
     {
-        return (::std::numeric_limits<Int>::max)()-3;
+        return (::std::numeric_limits<int_type>::max)()-3;
     }
     constexpr bool is_inf() const
     {
@@ -136,7 +134,7 @@ public:
     {
         return(is_inf() || is_nan()); 
     }
-    constexpr Int as_number() const
+    constexpr int_type as_number() const
     {
         return value_;
     }
@@ -147,7 +145,7 @@ public:
     }
 
     //creates nasty ambiguities
-    //   operator Int() const
+    //   operator int_type() const
     //   {
     //     return value_;
     //   }
@@ -162,11 +160,11 @@ public:
         if (is_nan()) return not_a_num();
         if (is_neg_inf()) return pos_inf();
         if (is_pos_inf()) return neg_inf();
-        return IntAdapter<Int>(static_cast<Int>(-value_));
+        return IntAdapter<int_type>(static_cast<int_type>(-value_));
     }
 
 private:
-    Int value_;
+    int_type value_;
 };
 
 
@@ -509,9 +507,6 @@ constexpr auto operator/(const IntAdapter<Int1> & lhs, const Int2 & rhs)
     return IntAdapter<CommonInt>(static_cast<CommonInt>(lhs.as_number()) / static_cast<CommonInt>(rhs));
     // not sure should simply lhs.as_number() * rhs.as_number() work
 }
-
-
-} // namespace utilities  
 
 
 } // namespace QLab  
