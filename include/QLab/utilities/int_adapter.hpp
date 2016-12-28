@@ -1,5 +1,5 @@
-#ifndef QLAB_UTILITIES_INT_ADAPTER_HPP_HITP3UES
-#define QLAB_UTILITIES_INT_ADAPTER_HPP_HITP3UES
+#ifndef QLAB_UTILITIES_IN_ADAPTER_HPP_HITP3UES
+#define QLAB_UTILITIES_IN_ADAPTER_HPP_HITP3UES
 
 #include <limits>
 #include <type_traits>
@@ -33,12 +33,12 @@ enum class SpecialValues : int {
  *   infinity  *  infinity  == infinity 
  *@endcode 
  */
-template <typename IntT_>
+template <typename Int_>
 class IntAdapter {
 public:
-    using IntT = IntT_;
+    using Int = Int_;
 
-    constexpr IntAdapter(const IntT v) : value_(v) {}
+    constexpr IntAdapter(const Int v) : value_(v) {}
 
     static constexpr bool has_infinity() noexcept
     {
@@ -47,123 +47,132 @@ public:
 
     static constexpr IntAdapter  pos_inf()
     {
-        return (::std::numeric_limits<IntT>::max)();
+        return (::std::numeric_limits<Int>::max)();
     }
     static constexpr IntAdapter  neg_inf()
     {
-        return (::std::numeric_limits<IntT>::min)();
+        return (::std::numeric_limits<Int>::min)();
     }
     static constexpr IntAdapter  not_a_num()
     {
-        return (::std::numeric_limits<IntT>::max)()-1;
+        return (::std::numeric_limits<Int>::max)()-1;
     }
     static constexpr IntAdapter max ()
     {
-        return (::std::numeric_limits<IntT>::max)()-2;
+        return (::std::numeric_limits<Int>::max)()-2;
     }
     static constexpr IntAdapter min ()
     {
-        return (::std::numeric_limits<IntT>::min)()+1;
+        return (::std::numeric_limits<Int>::min)()+1;
     }
     static constexpr IntAdapter from_special(SpecialValues sv)
     {
-        switch (sv) {
-            case SpecialValues::not_a_num:  return not_a_num();
-            case SpecialValues::neg_inf:    return neg_inf();
-            case SpecialValues::pos_inf:    return pos_inf();
-            case SpecialValues::max:        return max();
-            case SpecialValues::min:        return min();
-            default:              return not_a_num();
+        if (sv == SpecialValues::not_a_num)
+        { 
+            return not_a_num();
+        } else if (sv == SpecialValues::neg_inf) 
+        {
+            return neg_inf();
+        } else if (sv == SpecialValues::pos_inf)
+        {
+            return pos_inf();
+        } else if (sv == SpecialValues::max)
+        {
+            return max();
+        } else if (sv == SpecialValues::min) 
+        {
+            return min();
         }
+        return not_a_num();
     }
     //! Returns either special value type or is_not_special
-    static constexpr SpecialValues to_special(IntT v)
+    static constexpr SpecialValues to_special(Int v)
     {
         if (is_nan(v)) return SpecialValues::not_a_num;
         if (is_neg_inf(v)) return SpecialValues::neg_inf;
         if (is_pos_inf(v)) return SpecialValues::pos_inf;
         return SpecialValues::not_special;
     }
-    static constexpr bool is_inf(IntT v)
+    static constexpr bool is_inf(Int v)
     {
         return (v == neg_inf().as_number() ||
                 v == pos_inf().as_number());
     }
-    static constexpr bool is_neg_inf(IntT v)
+    static constexpr bool is_neg_inf(Int v)
     {
         return (v == neg_inf().as_number());
     }
-    static constexpr bool is_pos_inf(IntT v)
+    static constexpr bool is_pos_inf(Int v)
     {
         return (v == pos_inf().as_number());
     }
-    static constexpr bool is_nan(IntT v)
+    static constexpr bool is_nan(Int v)
     {
         return (v == not_a_num().as_number());
     }
     //-3 leaves room for representations of infinity and not a date
-    static constexpr IntT maxcount()
+    static constexpr Int maxcount()
     {
-        return (::std::numeric_limits<IntT>::max)()-3;
+        return (::std::numeric_limits<Int>::max)()-3;
     }
-    constexpr bool is_inf()
+    constexpr bool is_inf() const
     {
         return (value_ == neg_inf().as_number() ||
                 value_ == pos_inf().as_number());
     }
-    constexpr bool is_pos_inf()
+    constexpr bool is_pos_inf() const
     {
         return(value_ == pos_inf().as_number());
     }
-    constexpr bool is_neg_inf()
+    constexpr bool is_neg_inf() const
     {
         return(value_ == neg_inf().as_number());
     }
-    constexpr bool is_nan()
+    constexpr bool is_nan() const
     {
         return (value_ == not_a_num().as_number());
     }
-    constexpr bool is_special()
+    constexpr bool is_special() const
     {
         return(is_inf() || is_nan()); 
     }
-    constexpr IntT as_number()
+    constexpr Int as_number() const
     {
         return value_;
     }
     //! Returns either special value type or is_not_special
-    constexpr SpecialValues as_special()
+    constexpr SpecialValues as_special() const
     {
         return IntAdapter::to_special(value_);
     }
 
     //creates nasty ambiguities
-    //   operator IntT() const
+    //   operator Int() const
     //   {
     //     return value_;
     //   }
     
-    constexpr IntAdapter operator+()
+    constexpr IntAdapter operator+() const
     {
         return *this;
     }
 
-    constexpr IntAdapter operator-()
+    constexpr IntAdapter operator-() const
     {
         if (is_nan()) return not_a_num();
         if (is_neg_inf()) return pos_inf();
         if (is_pos_inf()) return neg_inf();
-        return IntAdapter<IntT>(static_cast<IntT>(-value_));
+        return IntAdapter<Int>(static_cast<Int>(-value_));
     }
 
 private:
-    IntT value_;
+    Int value_;
 };
 
 
 //! returns -1, 0, 1, or 2 if 'this' is <, ==, >, or 'nan comparison' rhs
-template <typename IntT1, typename IntT2>
-constexpr int compare( const IntAdapter<IntT1> & lhs, const IntAdapter<IntT2> & rhs)
+template <typename Int1, typename Int2>
+constexpr int compare( const IntAdapter<Int1> & lhs, const IntAdapter<Int2> & rhs)
 {
     if ( lhs.is_nan() || rhs.is_nan() )
     {
@@ -195,8 +204,8 @@ constexpr int compare( const IntAdapter<IntT1> & lhs, const IntAdapter<IntT2> & 
 
 }
 
-template <typename IntT1, typename IntT2>
-constexpr int compare( const IntAdapter<IntT1> & lhs, const IntT2 & rhs)
+template <typename Int1, typename Int2>
+constexpr int compare( const IntAdapter<Int1> & lhs, const Int2 & rhs)
 {
     if ( lhs.is_nan() ) return 2;
     if ( lhs.is_neg_inf() ) return -1;
@@ -206,8 +215,8 @@ constexpr int compare( const IntAdapter<IntT1> & lhs, const IntT2 & rhs)
     return 0;
 }
 
-template <typename IntT1, typename IntT2>
-constexpr int compare( const IntT1 & lhs, const IntAdapter<IntT2> & rhs)
+template <typename Int1, typename Int2>
+constexpr int compare( const Int1 & lhs, const IntAdapter<Int2> & rhs)
 {
     if ( rhs.is_nan() ) return 2;
     if ( rhs.is_neg_inf() ) return 1;
@@ -217,265 +226,265 @@ constexpr int compare( const IntT1 & lhs, const IntAdapter<IntT2> & rhs)
     return 0;
 }
 
-template <typename LHS, typename RHS>
-constexpr bool operator==( const LHS & lhs, const RHS & rhs)
+template <typename Int1, typename Int2>
+constexpr bool operator==( const Int1 & lhs, const Int2 & rhs)
 {
     return (compare(lhs, rhs) == 0);
 }
 
-template <typename LHS, typename RHS>
-constexpr bool operator!=( const LHS & lhs, const RHS & rhs)
+template <typename Int1, typename Int2>
+constexpr bool operator!=( const Int1 & lhs, const Int2 & rhs)
 {
     return (compare(lhs, rhs) != 0);
 }
 
-template <typename LHS, typename RHS>
-constexpr bool operator<( const LHS & lhs, const RHS & rhs)
+template <typename Int1, typename Int2>
+constexpr bool operator<( const Int1 & lhs, const Int2 & rhs)
 {
     return (compare(lhs, rhs) == -1);
 }
 
-template <typename LHS, typename RHS>
-constexpr bool operator<=( const LHS & lhs, const RHS & rhs)
+template <typename Int1, typename Int2>
+constexpr bool operator<=( const Int1 & lhs, const Int2 & rhs)
 {
     return ((compare(lhs, rhs) == -1) || (compare(lhs, rhs)==0));
 }
 
-template <typename LHS, typename RHS>
-constexpr bool operator>( const LHS & lhs, const RHS & rhs)
+template <typename Int1, typename Int2>
+constexpr bool operator>( const Int1 & lhs, const Int2 & rhs)
 {
     return (compare(lhs, rhs) == 1);
 }
 
-template <typename LHS, typename RHS>
-constexpr bool operator>=( const LHS & lhs, const RHS & rhs)
+template <typename Int1, typename Int2>
+constexpr bool operator>=( const Int1 & lhs, const Int2 & rhs)
 {
     return ((compare(lhs, rhs) == 1) || (compare(lhs, rhs)==0));
 }
 
-template <typename IntT1, typename IntT2>
-constexpr auto operator+(const IntAdapter<IntT1> & lhs, const IntAdapter<IntT2> & rhs)
-    -> IntAdapter<typename std::common_type<IntT1, IntT2>::type>
+template <typename Int1, typename Int2>
+constexpr auto operator+(const IntAdapter<Int1> & lhs, const IntAdapter<Int2> & rhs)
+    -> IntAdapter<typename std::common_type<Int1, Int2>::type>
 {
-    using CommonIntT = typename std::common_type<IntT1, IntT2>::type;
+    using CommonInt = typename std::common_type<Int1, Int2>::type;
     if ( lhs.is_nan() || rhs.is_nan())
     {
-        return IntAdapter<CommonIntT>::not_a_num();
+        return IntAdapter<CommonInt>::not_a_num();
     }
     if ( (lhs.is_neg_inf() && !rhs.is_pos_inf()) ||
             (!lhs.is_pos_inf() && rhs.is_neg_inf()))
     {
-        return IntAdapter<CommonIntT>::neg_inf();
+        return IntAdapter<CommonInt>::neg_inf();
     }
     if ( (lhs.is_pos_inf() && !rhs.is_neg_inf()) ||
             (!lhs.is_neg_inf() && rhs.is_pos_inf()))
     {
-        return IntAdapter<CommonIntT>::pos_inf();
+        return IntAdapter<CommonInt>::pos_inf();
     }
     if ( (lhs.is_pos_inf() && rhs.is_neg_inf()) ||
             (lhs.is_neg_inf() && rhs.is_pos_inf()))
     {
-        return IntAdapter<CommonIntT>::not_a_num();
+        return IntAdapter<CommonInt>::not_a_num();
     }
-    return IntAdapter<CommonIntT>(static_cast<CommonIntT>(lhs.as_number()) + static_cast<CommonIntT>(rhs.as_number()));
+    return IntAdapter<CommonInt>(static_cast<CommonInt>(lhs.as_number()) + static_cast<CommonInt>(rhs.as_number()));
     // not sure should simply lhs.as_number() + rhs.as_number() work
 }
 
-template <typename IntT1, typename IntT2>
-constexpr auto operator+(const IntAdapter<IntT1> & lhs, const IntT2 & rhs)
-    -> IntAdapter<typename std::common_type<IntT1, IntT2>::type>
+template <typename Int1, typename Int2>
+constexpr auto operator+(const IntAdapter<Int1> & lhs, const Int2 & rhs)
+    -> IntAdapter<typename std::common_type<Int1, Int2>::type>
 {
-    using CommonIntT = typename std::common_type<IntT1, IntT2>::type;
+    using CommonInt = typename std::common_type<Int1, Int2>::type;
     if ( lhs.is_nan() )
     {
-        return IntAdapter<CommonIntT>::not_a_num();
+        return IntAdapter<CommonInt>::not_a_num();
     }
     if ( lhs.is_neg_inf() ) {
-        return IntAdapter<CommonIntT>::neg_inf();
+        return IntAdapter<CommonInt>::neg_inf();
     }
     if ( lhs.is_pos_inf() ) {
-        return IntAdapter<CommonIntT>::pos_inf();
+        return IntAdapter<CommonInt>::pos_inf();
     }
-    return IntAdapter<CommonIntT>(static_cast<CommonIntT>(lhs.as_number()) + static_cast<CommonIntT>(rhs));
+    return IntAdapter<CommonInt>(static_cast<CommonInt>(lhs.as_number()) + static_cast<CommonInt>(rhs));
 }
 
-template <typename IntT1, typename IntT2>
-constexpr auto operator+(const IntT1 & lhs, const IntAdapter<IntT2> & rhs)
-    -> IntAdapter<typename std::common_type<IntT1, IntT2>::type>
+template <typename Int1, typename Int2>
+constexpr auto operator+(const Int1 & lhs, const IntAdapter<Int2> & rhs)
+    -> IntAdapter<typename std::common_type<Int1, Int2>::type>
 {
-    using CommonIntT = typename std::common_type<IntT1, IntT2>::type;
+    using CommonInt = typename std::common_type<Int1, Int2>::type;
     if ( rhs.is_nan() )
     {
-        return IntAdapter<CommonIntT>::not_a_num();
+        return IntAdapter<CommonInt>::not_a_num();
     }
     if ( rhs.is_neg_inf() ) {
-        return IntAdapter<CommonIntT>::neg_inf();
+        return IntAdapter<CommonInt>::neg_inf();
     }
     if ( rhs.is_pos_inf() ) {
-        return IntAdapter<CommonIntT>::pos_inf();
+        return IntAdapter<CommonInt>::pos_inf();
     }
-    return IntAdapter<CommonIntT>(static_cast<CommonIntT>(lhs) + static_cast<CommonIntT>(rhs.as_number()));
+    return IntAdapter<CommonInt>(static_cast<CommonInt>(lhs) + static_cast<CommonInt>(rhs.as_number()));
 }
 
-template <typename IntT1, typename IntT2>
-constexpr auto operator-(const IntAdapter<IntT1> & lhs, const IntAdapter<IntT2> & rhs)
-    -> IntAdapter<typename std::common_type<IntT1, IntT2>::type>
+template <typename Int1, typename Int2>
+constexpr auto operator-(const IntAdapter<Int1> & lhs, const IntAdapter<Int2> & rhs)
+    -> IntAdapter<typename std::common_type<Int1, Int2>::type>
 {
-    using CommonIntT = typename std::common_type<IntT1, IntT2>::type;
+    using CommonInt = typename std::common_type<Int1, Int2>::type;
     if ( lhs.is_nan() || rhs.is_nan())
     {
-        return IntAdapter<CommonIntT>::not_a_num();
+        return IntAdapter<CommonInt>::not_a_num();
     }
     if ( (lhs.is_neg_inf() && !rhs.is_neg_inf()) ||
             (!lhs.is_pos_inf() && rhs.is_pos_inf()))
     {
-        return IntAdapter<CommonIntT>::neg_inf();
+        return IntAdapter<CommonInt>::neg_inf();
     }
     if ( (lhs.is_pos_inf() && !rhs.is_pos_inf()) ||
             (!lhs.is_neg_inf() && rhs.is_neg_inf()))
     {
-        return IntAdapter<CommonIntT>::pos_inf();
+        return IntAdapter<CommonInt>::pos_inf();
     }
     if ( (lhs.is_pos_inf() && rhs.is_pos_inf()) ||
             (lhs.is_neg_inf() && rhs.is_neg_inf()))
     {
-        return IntAdapter<CommonIntT>::not_a_num();
+        return IntAdapter<CommonInt>::not_a_num();
     }
-    return IntAdapter<CommonIntT>(static_cast<CommonIntT>(lhs.as_number()) - static_cast<CommonIntT>(rhs.as_number()));
+    return IntAdapter<CommonInt>(static_cast<CommonInt>(lhs.as_number()) - static_cast<CommonInt>(rhs.as_number()));
     // not sure should simply lhs.as_number() - rhs.as_number() work
 }
 
-template <typename IntT1, typename IntT2>
-constexpr auto operator-(const IntAdapter<IntT1> & lhs, const IntT2 & rhs)
-    -> IntAdapter<typename std::common_type<IntT1, IntT2>::type>
+template <typename Int1, typename Int2>
+constexpr auto operator-(const IntAdapter<Int1> & lhs, const Int2 & rhs)
+    -> IntAdapter<typename std::common_type<Int1, Int2>::type>
 {
-    using CommonIntT = typename std::common_type<IntT1, IntT2>::type;
+    using CommonInt = typename std::common_type<Int1, Int2>::type;
     if ( lhs.is_nan() )
     {
-        return IntAdapter<CommonIntT>::not_a_num();
+        return IntAdapter<CommonInt>::not_a_num();
     }
     if ( lhs.is_neg_inf() ) {
-        return IntAdapter<CommonIntT>::neg_inf();
+        return IntAdapter<CommonInt>::neg_inf();
     }
     if ( lhs.is_pos_inf() ) {
-        return IntAdapter<CommonIntT>::pos_inf();
+        return IntAdapter<CommonInt>::pos_inf();
     }
-    return IntAdapter<CommonIntT>(static_cast<CommonIntT>(lhs.as_number()) - static_cast<CommonIntT>(rhs));
+    return IntAdapter<CommonInt>(static_cast<CommonInt>(lhs.as_number()) - static_cast<CommonInt>(rhs));
 }
 
-template <typename IntT1, typename IntT2>
-constexpr auto operator-(const IntT1 & lhs, const IntAdapter<IntT2> & rhs)
-    -> IntAdapter<typename std::common_type<IntT1, IntT2>::type>
+template <typename Int1, typename Int2>
+constexpr auto operator-(const Int1 & lhs, const IntAdapter<Int2> & rhs)
+    -> IntAdapter<typename std::common_type<Int1, Int2>::type>
 {
-    using CommonIntT = typename std::common_type<IntT1, IntT2>::type;
+    using CommonInt = typename std::common_type<Int1, Int2>::type;
     if ( rhs.is_nan() )
     {
-        return IntAdapter<CommonIntT>::not_a_num();
+        return IntAdapter<CommonInt>::not_a_num();
     }
     if ( rhs.is_neg_inf() ) {
-        return IntAdapter<CommonIntT>::pos_inf();
+        return IntAdapter<CommonInt>::pos_inf();
     }
     if ( rhs.is_pos_inf() ) {
-        return IntAdapter<CommonIntT>::inf_inf();
+        return IntAdapter<CommonInt>::neg_inf();
     }
-    return IntAdapter<CommonIntT>(static_cast<CommonIntT>(lhs) - static_cast<CommonIntT>(rhs.as_number()));
+    return IntAdapter<CommonInt>(static_cast<CommonInt>(lhs) - static_cast<CommonInt>(rhs.as_number()));
 }
 
 
-template <typename IntT1, typename IntT2>
-constexpr auto mult_div_specials(const IntAdapter<IntT1> & lhs, const IntAdapter<IntT2> & rhs)
-    -> IntAdapter<typename std::common_type<IntT1, IntT2>::type>
+template <typename Int1, typename Int2>
+constexpr auto mult_div_specials(const IntAdapter<Int1> & lhs, const IntAdapter<Int2> & rhs)
+    -> IntAdapter<typename std::common_type<Int1, Int2>::type>
 {
-    using CommonIntT = typename std::common_type<IntT1, IntT2>::type;
+    using CommonInt = typename std::common_type<Int1, Int2>::type;
     if ( lhs.is_nan() || rhs.is_nan())
     {
-        return IntAdapter<CommonIntT>::not_a_num();
+        return IntAdapter<CommonInt>::not_a_num();
     }
-    int min_value1 = std::numeric_limits<IntT1>::is_signed() ? 0 : 1;
-    int min_value2 = std::numeric_limits<IntT2>::is_signed() ? 0 : 1;
+    int min_value1 = std::numeric_limits<Int1>::is_signed ? 0 : 1;
+    int min_value2 = std::numeric_limits<Int2>::is_signed ? 0 : 1;
     if ( (lhs < min_value1 && rhs < min_value2) ||
            (lhs > 0 && rhs > 0) )
     {
-        return IntAdapter<CommonIntT>::pos_inf();
+        return IntAdapter<CommonInt>::pos_inf();
     }
     if ( (lhs < min_value1 && rhs > 0) ||
            (lhs > 0 && rhs < min_value2) )
     {
-        return IntAdapter<CommonIntT>::neg_inf();
+        return IntAdapter<CommonInt>::neg_inf();
     }
-    return IntAdapter<CommonIntT>::not_a_num();
+    return IntAdapter<CommonInt>::not_a_num();
 }
 
-template <typename IntT1, typename IntT2>
-constexpr auto mult_div_specials(const IntAdapter<IntT1> & lhs, const IntT2 & rhs)
-    -> IntAdapter<typename std::common_type<IntT1, IntT2>::type>
+template <typename Int1, typename Int2>
+constexpr auto mult_div_specials(const IntAdapter<Int1> & lhs, const Int2 & rhs)
+    -> IntAdapter<typename std::common_type<Int1, Int2>::type>
 {
-    using CommonIntT = typename std::common_type<IntT1, IntT2>::type;
+    using CommonInt = typename std::common_type<Int1, Int2>::type;
     if ( lhs.is_nan() )
     {
-        return IntAdapter<CommonIntT>::not_a_num();
+        return IntAdapter<CommonInt>::not_a_num();
     }
-    int min_value = std::numeric_limits<IntT1>::is_signed() ? 0 : 1;
+    int min_value = std::numeric_limits<Int1>::is_signed ? 0 : 1;
     if ( (lhs < min_value && rhs < 0) ||
            (lhs > 0 && rhs > 0) )
     {
-        return IntAdapter<CommonIntT>::pos_inf();
+        return IntAdapter<CommonInt>::pos_inf();
     }
     if ( (lhs < min_value && rhs > 0) ||
            (lhs > 0 && rhs < 0) )
     {
-        return IntAdapter<CommonIntT>::neg_inf();
+        return IntAdapter<CommonInt>::neg_inf();
     }
-    return IntAdapter<CommonIntT>::not_a_num();
+    return IntAdapter<CommonInt>::not_a_num();
 }
 
-template <typename IntT1, typename IntT2>
-constexpr auto operator*(const IntAdapter<IntT1> & lhs, const IntAdapter<IntT2> & rhs)
-    -> IntAdapter<typename std::common_type<IntT1, IntT2>::type>
+template <typename Int1, typename Int2>
+constexpr auto operator*(const IntAdapter<Int1> & lhs, const IntAdapter<Int2> & rhs)
+    -> IntAdapter<typename std::common_type<Int1, Int2>::type>
 {
-    using CommonIntT = typename std::common_type<IntT1, IntT2>::type;
+    using CommonInt = typename std::common_type<Int1, Int2>::type;
     if ( lhs.is_special() || rhs.is_special())
     {
         return mult_div_specials(lhs, rhs);
     }
-    return IntAdapter<CommonIntT>(static_cast<CommonIntT>(lhs.as_number()) * static_cast<CommonIntT>(rhs.as_number()));
+    return IntAdapter<CommonInt>(static_cast<CommonInt>(lhs.as_number()) * static_cast<CommonInt>(rhs.as_number()));
     // not sure should simply lhs.as_number() * rhs.as_number() work
 }
 
-template <typename IntT1, typename IntT2>
-constexpr auto operator*(const IntAdapter<IntT1> & lhs, const IntT2 & rhs)
-    -> IntAdapter<typename std::common_type<IntT1, IntT2>::type>
+template <typename Int1, typename Int2>
+constexpr auto operator*(const IntAdapter<Int1> & lhs, const Int2 & rhs)
+    -> IntAdapter<typename std::common_type<Int1, Int2>::type>
 {
-    using CommonIntT = typename std::common_type<IntT1, IntT2>::type;
+    using CommonInt = typename std::common_type<Int1, Int2>::type;
     if (lhs.is_special()) {
         return mult_div_specials(lhs, rhs);
     }
-    return IntAdapter<CommonIntT>(static_cast<CommonIntT>(lhs.as_number()) * static_cast<CommonIntT>(rhs));
+    return IntAdapter<CommonInt>(static_cast<CommonInt>(lhs.as_number()) * static_cast<CommonInt>(rhs));
     // not sure should simply lhs.as_number() * rhs.as_number() work
 }
 
-template <typename IntT1, typename IntT2>
-constexpr auto operator*(const IntT1 & lhs, const IntAdapter<IntT2> & rhs)
-    -> IntAdapter<typename std::common_type<IntT1, IntT2>::type>
+template <typename Int1, typename Int2>
+constexpr auto operator*(const Int1 & lhs, const IntAdapter<Int2> & rhs)
+    -> IntAdapter<typename std::common_type<Int1, Int2>::type>
 {
-    using CommonIntT = typename std::common_type<IntT1, IntT2>::type;
+    using CommonInt = typename std::common_type<Int1, Int2>::type;
     if (rhs.is_special()) {
         return mult_div_specials(rhs, lhs);
     }
-    return IntAdapter<CommonIntT>(static_cast<CommonIntT>(lhs) * static_cast<CommonIntT>(rhs.as_number()));
+    return IntAdapter<CommonInt>(static_cast<CommonInt>(lhs) * static_cast<CommonInt>(rhs.as_number()));
     // not sure should simply lhs.as_number() * rhs.as_number() work
 }
 
-template <typename IntT1, typename IntT2>
-constexpr auto operator/(const IntAdapter<IntT1> & lhs, const IntAdapter<IntT2> & rhs)
-    -> IntAdapter<typename std::common_type<IntT1, IntT2>::type>
+template <typename Int1, typename Int2>
+constexpr auto operator/(const IntAdapter<Int1> & lhs, const IntAdapter<Int2> & rhs)
+    -> IntAdapter<typename std::common_type<Int1, Int2>::type>
 {
-    using CommonIntT = typename std::common_type<IntT1, IntT2>::type;
+    using CommonInt = typename std::common_type<Int1, Int2>::type;
     if ( lhs.is_special() || rhs.is_special())
     {
         if ( lhs.is_inf() && rhs.is_inf() )
         {
-            return IntAdapter<CommonIntT>::not_a_num();
+            return IntAdapter<CommonInt>::not_a_num();
         }
         if ( rhs != 0 )
         {
@@ -483,21 +492,21 @@ constexpr auto operator/(const IntAdapter<IntT1> & lhs, const IntAdapter<IntT2> 
         }
         // else let it blow up
     }
-    return IntAdapter<CommonIntT>(static_cast<CommonIntT>(lhs.as_number()) / static_cast<CommonIntT>(rhs.as_number()));
+    return IntAdapter<CommonInt>(static_cast<CommonInt>(lhs.as_number()) / static_cast<CommonInt>(rhs.as_number()));
     // not sure should simply lhs.as_number() * rhs.as_number() work
 }
 
-template <typename IntT1, typename IntT2>
-constexpr auto operator/(const IntAdapter<IntT1> & lhs, const IntT2 & rhs)
-    -> IntAdapter<typename std::common_type<IntT1, IntT2>::type>
+template <typename Int1, typename Int2>
+constexpr auto operator/(const IntAdapter<Int1> & lhs, const Int2 & rhs)
+    -> IntAdapter<typename std::common_type<Int1, Int2>::type>
 {
-    using CommonIntT = typename std::common_type<IntT1, IntT2>::type;
+    using CommonInt = typename std::common_type<Int1, Int2>::type;
     if ( lhs.is_special() && rhs != 0 )
     {
         return mult_div_specials(lhs, rhs);
         // else let it blow up
     }
-    return IntAdapter<CommonIntT>(static_cast<CommonIntT>(lhs.as_number()) / static_cast<CommonIntT>(rhs.as_number()));
+    return IntAdapter<CommonInt>(static_cast<CommonInt>(lhs.as_number()) / static_cast<CommonInt>(rhs));
     // not sure should simply lhs.as_number() * rhs.as_number() work
 }
 
@@ -507,4 +516,4 @@ constexpr auto operator/(const IntAdapter<IntT1> & lhs, const IntT2 & rhs)
 
 } // namespace QLab  
 
-#endif // end of include guard: QLAB_UTILITIES_INT_ADAPTER_HPP_HITP3UES
+#endif // end of include guard: QLAB_UTILITIES_IN_ADAPTER_HPP_HITP3UES
