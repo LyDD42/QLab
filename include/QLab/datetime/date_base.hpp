@@ -5,12 +5,12 @@
 namespace QLab {
 
 
-template <class Date_, class Calendar_, class Duration_>
+template <class Date, class Calendar, class Duration>
 class DateBase {
 public:
-	using date_type		= Date_;
-	using calendar_type	= Calendar_;
-	using duration_type = Duration_;
+	using date_type		= Date;
+	using calendar_type	= Calendar;
+	using duration_type = Duration;
     using ymd_type      = typename calendar_type::ymd_type;
     using date_int_type = typename calendar_type::date_int_type;
     using year_type     = typename calendar_type::year_type;

@@ -1,5 +1,6 @@
-#ifndef QLAB_DATE_TIME_CALENDER_HPP_
-#define QLAB_DATE_TIME_CALENDER_HPP_
+#ifndef QLAB_DATETIME_GREGORIAN_CALENDAR_BASE_HPP_IFT29EYW
+#define QLAB_DATETIME_GREGORIAN_CALENDAR_BASE_HPP_IFT29EYW
+
 
 #include <cstdint>
 
@@ -123,4 +124,4 @@ auto GregorianCalendarBase<YMD_,DateInt_>::day_of_week(const ymd_type& ymd) -> u
 }// namespace QLab
 
 
-#endif
+#endif // end of include guard: QLAB_DATETIME_GREGORIAN_CALENDAR_BASE_HPP_IFT29EYW

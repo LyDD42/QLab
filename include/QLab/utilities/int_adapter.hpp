@@ -16,7 +16,6 @@ enum class SpecialValues : int {
     not_special
 };
 
-
 //! Adapter to create integer types with +-infinity, and not a value
 /*! This class is used internally in counted date/time representations.
  *  It adds the floating point like features of infinities and
@@ -31,10 +30,14 @@ enum class SpecialValues : int {
  *   infinity  *  infinity  == infinity 
  *@endcode 
  */
-template <typename Int_>
+template <typename Int, typename std::enable_if
+                            <
+                                std::is_integral<Int>::value
+                            >::type* tp_ = nullptr>
 class IntAdapter {
 public:
-    using int_type = Int_;
+    using int_type   = Int;
+    using value_type = int_type;
 
     constexpr IntAdapter(const int_type v) : value_(v) {}
 
@@ -510,5 +513,6 @@ constexpr auto operator/(const IntAdapter<Int1> & lhs, const Int2 & rhs)
 
 
 } // namespace QLab  
+
 
 #endif // end of include guard: QLAB_UTILITIES_IN_ADAPTER_HPP_HITP3UES
