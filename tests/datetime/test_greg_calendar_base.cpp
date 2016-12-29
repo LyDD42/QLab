@@ -2,8 +2,8 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include "QLab/datetime/greg_calendar_base.hpp"
-#include "QLab/datetime/greg_ymd.hpp"
+#include "QLab/datetime/gregorian_calendar_base.hpp"
+#include "QLab/datetime/greg_defs.hpp"
 
 struct F{
     F() : greg_clendar{} {}

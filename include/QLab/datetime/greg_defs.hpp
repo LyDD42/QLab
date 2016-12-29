@@ -4,7 +4,7 @@
 #include "QLab/utilities/constrained_value.hpp"
 #include "QLab/utilities/int_adapter.hpp"
 #include "QLab/datetime/year_month_day.hpp"
-#include "QLab/datetime/greg_calendar_base.hpp"
+#include "QLab/datetime/gregorian_calendar_base.hpp"
 
 namespace QLab
 {

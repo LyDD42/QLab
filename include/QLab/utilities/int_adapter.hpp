@@ -228,37 +228,109 @@ constexpr int compare( const Int1 & lhs, const IntAdapter<Int2> & rhs)
 }
 
 template <typename Int1, typename Int2>
-constexpr bool operator==( const Int1 & lhs, const Int2 & rhs)
+constexpr bool operator==( const IntAdapter<Int1> & lhs, const IntAdapter<Int2> & rhs)
 {
     return (compare(lhs, rhs) == 0);
 }
 
 template <typename Int1, typename Int2>
-constexpr bool operator!=( const Int1 & lhs, const Int2 & rhs)
+constexpr bool operator==( const IntAdapter<Int1> & lhs, const Int2 & rhs)
+{
+    return (compare(lhs, rhs) == 0);
+}
+
+template <typename Int1, typename Int2>
+constexpr bool operator==( const Int1 & lhs, const IntAdapter<Int2> & rhs)
+{
+    return (compare(lhs, rhs) == 0);
+}
+
+template <typename Int1, typename Int2>
+constexpr bool operator!=( const IntAdapter<Int1> & lhs, const IntAdapter<Int2> & rhs)
 {
     return (compare(lhs, rhs) != 0);
 }
 
 template <typename Int1, typename Int2>
-constexpr bool operator<( const Int1 & lhs, const Int2 & rhs)
+constexpr bool operator!=( const IntAdapter<Int1> & lhs, const Int2 & rhs)
+{
+    return (compare(lhs, rhs) != 0);
+}
+
+template <typename Int1, typename Int2>
+constexpr bool operator!=( const Int1 & lhs, const IntAdapter<Int2> & rhs)
+{
+    return (compare(lhs, rhs) != 0);
+}
+
+template <typename Int1, typename Int2>
+constexpr bool operator<( const IntAdapter<Int1> & lhs, const IntAdapter<Int2> & rhs)
 {
     return (compare(lhs, rhs) == -1);
 }
 
 template <typename Int1, typename Int2>
-constexpr bool operator<=( const Int1 & lhs, const Int2 & rhs)
+constexpr bool operator<( const Int1 & lhs, const IntAdapter<Int2> & rhs)
+{
+    return (compare(lhs, rhs) == -1);
+}
+
+template <typename Int1, typename Int2>
+constexpr bool operator<( const IntAdapter<Int1> & lhs, const Int2 & rhs)
+{
+    return (compare(lhs, rhs) == -1);
+}
+
+template <typename Int1, typename Int2>
+constexpr bool operator<=( const IntAdapter<Int1> & lhs, const IntAdapter<Int2> & rhs)
 {
     return ((compare(lhs, rhs) == -1) || (compare(lhs, rhs)==0));
 }
 
 template <typename Int1, typename Int2>
-constexpr bool operator>( const Int1 & lhs, const Int2 & rhs)
+constexpr bool operator<=( const Int1 & lhs, const IntAdapter<Int2> & rhs)
+{
+    return ((compare(lhs, rhs) == -1) || (compare(lhs, rhs)==0));
+}
+
+template <typename Int1, typename Int2>
+constexpr bool operator<=( const IntAdapter<Int1> & lhs, const Int2 & rhs)
+{
+    return ((compare(lhs, rhs) == -1) || (compare(lhs, rhs)==0));
+}
+
+template <typename Int1, typename Int2>
+constexpr bool operator>( const IntAdapter<Int1> & lhs, const IntAdapter<Int2> & rhs)
 {
     return (compare(lhs, rhs) == 1);
 }
 
 template <typename Int1, typename Int2>
-constexpr bool operator>=( const Int1 & lhs, const Int2 & rhs)
+constexpr bool operator>( const Int1 & lhs, const IntAdapter<Int2> & rhs)
+{
+    return (compare(lhs, rhs) == 1);
+}
+
+template <typename Int1, typename Int2>
+constexpr bool operator>( const IntAdapter<Int1> & lhs, const Int2 & rhs)
+{
+    return (compare(lhs, rhs) == 1);
+}
+
+template <typename Int1, typename Int2>
+constexpr bool operator>=( const IntAdapter<Int1> & lhs, const IntAdapter<Int2> & rhs)
+{
+    return ((compare(lhs, rhs) == 1) || (compare(lhs, rhs)==0));
+}
+
+template <typename Int1, typename Int2>
+constexpr bool operator>=( const Int1 & lhs, const IntAdapter<Int2> & rhs)
+{
+    return ((compare(lhs, rhs) == 1) || (compare(lhs, rhs)==0));
+}
+
+template <typename Int1, typename Int2>
+constexpr bool operator>=( const IntAdapter<Int1> & lhs, const Int2 & rhs)
 {
     return ((compare(lhs, rhs) == 1) || (compare(lhs, rhs)==0));
 }

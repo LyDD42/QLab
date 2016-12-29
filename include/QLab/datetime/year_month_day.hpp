@@ -5,22 +5,22 @@
 namespace QLab {
 
 
-template <class YearT_, class MonthT_, class DayT_>
+template <class Year, class Month, class Day>
 struct YMDBase{
 public:
-	using YearT		= YearT_;
-	using MonthT	= MonthT_;
-	using DayT		= DayT_;
+	using year_type		= Year;
+	using month_type	= Month;
+	using day_type		= Day;
 
-	constexpr YMDBase (YearT year, MonthT month, DayT day):
+	constexpr YMDBase (year_type year, month_type month, day_type day):
 		year(year),
 		month(month),
 		day(day)
 	{}
 
-	YearT	year;
-	MonthT	month;
-	DayT	day;
+	year_type	year;
+	month_type	month;
+	day_type	day;
 };
 
 
