@@ -13,8 +13,16 @@ BOOST_AUTO_TEST_SUITE(test_array)
 
 BOOST_AUTO_TEST_CASE(test)
 {
-    Array<int, 1>();
-    BOOST_TEST(true);
+    BOOST_TEST((Array<double, 1>::dim == 1));
+}
+
+BOOST_AUTO_TEST_CASE(test_constructor)
+{
+    Array<double, 1> array1{};
+    BOOST_TEST(array2.size() == 0);
+    Array<double, 2> array2{{2, 2}, 1.0};
+    BOOST_TEST(array2.size() == 4);
+    Array<double, 2> array3(array2);
 }
 
 BOOST_AUTO_TEST_SUITE_END() // test suite test_array

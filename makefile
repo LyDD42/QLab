@@ -30,7 +30,7 @@ vpath %.cpp tests/math
 all:
 
 run_test: test_runner clean 
-	./test_runner
+	./test_runner -l all
 
 # # using implicit linking rule
 # test_runner: $(wildcard, *.o)
